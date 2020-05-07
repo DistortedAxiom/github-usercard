@@ -4,6 +4,18 @@
     https://api.github.com/users/<your name>
 */
 
+const cards = document.querySelector('.cards');
+
+axios.get('https://api.github.com/users/DistortedAxiom')
+  .then((gitData) => {
+    const myProfile = gitData.data;
+    cards.appendChild(cardMaker(myProfile));
+
+  })
+  .catch((err) => {
+    console.log(err);
+  })
+
 /*
   STEP 2: Inspect and study the data coming back, this is YOUR
     github info! You will need to understand the structure of this
@@ -28,7 +40,25 @@
     user, and adding that card to the DOM.
 */
 
-const followersArray = [];
+const followersArray = ['tetondan', 'dustinmyers', 'justsml', 'luishrd', 'bigknell'];
+
+var i = 0;
+
+followersArray.forEach((user, i) => {
+  axios.get(`https://api.github.com/users/${followersArray[i]}`)
+
+  .then((gitData) => {
+    const profile = gitData.data;
+    cards.appendChild(cardMaker(profile));
+  })
+
+  .catch((err) => {
+    console.log(err);
+  }),
+
+  i++;
+
+});
 
 /*
   STEP 3: Create a function that accepts a single object as its only argument.
@@ -58,3 +88,55 @@ const followersArray = [];
     luishrd
     bigknell
 */
+
+function cardMaker(obj) {
+  const card = document.createElement('div');
+  card.classList.add('card');
+
+  const cardImg = document.createElement('img');
+  cardImg.src = obj.avatar_url;
+
+  const cardInfo = document.createElement('div');
+  cardInfo.classList.add('card-info');
+
+  const name = document.createElement('h3');
+  name.classList.add('name');
+  name.textContent = `${obj.name}`;
+
+  const username = document.createElement('p');
+  username.classList.add('username');
+  username.textContent = `${obj.username}`;
+
+  const location = document.createElement('p');
+  location.textContent = `${obj.location}`;
+
+  const profile = document.createElement('p');
+  profile.textContent = `Profile: `
+
+  const profileLink = document.createElement('a');
+  profileLink.href =  obj.html_url;
+  profileLink.textContent = obj.html_url;
+
+  const followers = document.createElement('p');
+  followers.textContent = `Followers: ${obj.followers}`;
+
+  const following = document.createElement('p');
+  following.textContent = `Following: ${obj.following}`;
+
+  const bio = document.createElement('p');
+  bio.textContent = `Bio: ${obj.bio}`;
+
+  card.appendChild(cardImg);
+  card.appendChild(cardInfo);
+
+  cardInfo.appendChild(name);
+  cardInfo.appendChild(username);
+  cardInfo.appendChild(location);
+  cardInfo.appendChild(profile);
+  profile.appendChild(profileLink);
+  cardInfo.appendChild(followers);
+  cardInfo.appendChild(following);
+  cardInfo.appendChild(bio);
+
+  return card;
+}
