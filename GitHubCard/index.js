@@ -49,6 +49,7 @@ followersArray.forEach((user, i) => {
 
   .then((gitData) => {
     const profile = gitData.data;
+    console.log(profile);
     cards.appendChild(cardMaker(profile));
   })
 
@@ -126,6 +127,19 @@ function cardMaker(obj) {
   const bio = document.createElement('p');
   bio.textContent = `Bio: ${obj.bio}`;
 
+  const expand = document.createElement('span');
+  expand.classList.add('expandButton');
+  expand.textContent = "EXPAND";
+
+  const extra_info = document.createElement('div');
+  extra_info.classList.add('extraInfo');
+
+  const public_gists = document.createElement('p');
+  public_gists.textContent = `Public Gists: ${obj.public_gists}`;
+
+  const private_gists = document.createElement('p');
+  private_gists.textContent = `Private Gists: ${obj.private_gists}`;
+
   card.appendChild(cardImg);
   card.appendChild(cardInfo);
 
@@ -137,6 +151,43 @@ function cardMaker(obj) {
   cardInfo.appendChild(followers);
   cardInfo.appendChild(following);
   cardInfo.appendChild(bio);
+  cardInfo.appendChild(expand);
+
+  expand.appendChild(extra_info);
+
+  extra_info.appendChild(public_gists);
+  extra_info.appendChild(private_gists);
+
+  expand.addEventListener("click", (e) => {
+    extra_info.classList.toggle('infoOpen');
+  })
 
   return card;
 }
+
+// STRETCH: EXPANDING CARD
+
+/*
+
+<div class="card">
+      <img src={image url of user} />
+      <div class="card-info">
+        <h3 class="name">{users name}</h3>
+        <p class="username">{users user name}</p>
+        <p>Location: {users location}</p>
+        <p>Profile:
+          <a href={address to users github page}>{address to users github page}</a>
+        </p>
+        <p>Followers: {users followers count}</p>
+        <p>Following: {users following count}</p>
+        <p>Bio: {users bio}</p>
+      </div>
+      <span>  // NEW STUFF
+      <div>
+        <p>Public Gists: {users public_gists}</p>
+        <p>Private Gists: {users private_gists}</p>
+      </div>
+      </span>
+    </div>
+
+*/
